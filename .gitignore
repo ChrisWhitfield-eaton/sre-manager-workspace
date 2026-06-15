@@ -1,0 +1,24 @@
+# Credentials and secrets
+.env
+.env.*
+*.pem
+*.key
+*.token
+
+# Local scratch notes (use .github/context/ for persistent context)
+scratch/
+notes/
+*.scratch.md
+*.local.md
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node (MCP server dependencies if installed locally)
+node_modules/
+package-lock.json
+
+# VS Code local state
+.vscode/

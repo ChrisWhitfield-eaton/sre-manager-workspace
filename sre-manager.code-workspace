@@ -1,0 +1,53 @@
+{
+	// ──────────────────────────────────────────────────────────────────
+	// Folder paths assume all repos are cloned as siblings under a
+	// common parent directory (e.g., ~/repos/).  Update each "path"
+	// to match your actual clone locations.  The "name" field is a
+	// display-only label that appears in the VS Code Explorer sidebar.
+	// ──────────────────────────────────────────────────────────────────
+	"folders": [
+		{
+			"name": "SRE-Manager",
+			"path": "."
+		},
+		{
+			"name": "Policy-and-Standards",
+			"path": "../sre-policy"
+		},
+		{
+			"name": "Infrastructure",
+			"path": "../infrastructure"
+		},
+		{
+			"name": "Platform-Engineering",
+			"path": "../platform-engineering"
+		},
+		{
+			"name": "Runbooks",
+			"path": "../runbooks"
+		},
+		{
+			"name": "CICD-Pipelines",
+			"path": "../github-actions-workflows"
+		}
+	],
+	"settings": {
+		"chat.instructionsFilesLocations": [
+			".github/instructions",
+			".github"
+		],
+		"chat.agent.instructions.file": ".github/copilot-instructions.md",
+		"files.associations": {
+			"*.instructions.md": "markdown"
+		},
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"[markdown]": {
+			"editor.wordWrap": "on",
+			"editor.quickSuggestions": {
+				"other": false,
+				"comments": false,
+				"strings": false
+			}
+		}
+	}
+}
