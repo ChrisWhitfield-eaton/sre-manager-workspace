@@ -29,18 +29,21 @@
 		{
 			"name": "CICD-Pipelines",
 			"path": "../github-actions-workflows"
+		},
+		{
+			"name": "sre-docs",
+			"path": "../../repos/sre-docs"
+		},
+		{
+			"name": "DhruvaAI-Toolkit",
+			"path": "../dhruva-ai-toolkit"
 		}
 	],
 	"settings": {
-		"chat.instructionsFilesLocations": [
-			".github/instructions",
-			".github"
-		],
 		"chat.agent.instructions.file": ".github/copilot-instructions.md",
 		"files.associations": {
 			"*.instructions.md": "markdown"
 		},
-		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"[markdown]": {
 			"editor.wordWrap": "on",
 			"editor.quickSuggestions": {
