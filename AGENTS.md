@@ -15,6 +15,50 @@ This SRE organization has two sub-teams:
 
 If you are unsure which team context applies, ask.
 
+## Service Taxonomy Baseline (JSM Assets)
+
+Use this baseline when creating, reviewing, or updating Brightlayer service taxonomy artifacts:
+
+- **Authoritative system:** JSM Assets (Insight).
+- **Top hierarchy (locked):**
+  - Product Family: **Brightlayer**
+  - Platform: **Brightlayer Cloud Platform**
+  - Business Service: **Remote Monitoring Platform (Fiji)**
+- **Future platform:** Brightlayer On-Prem Platform will be added later under Product Family Brightlayer.
+
+### Product Taxonomy Scope (Pre-SRE Catalog)
+
+- Include product/platform business and technical service taxonomy.
+- Exclude SRE-owned catalog domains (for example, observability service catalog items) from the product/platform/business-service taxonomy.
+- Model SRE catalog items separately in the SRE service catalog taxonomy.
+
+### Fiji Business Service Children (Customer-facing)
+
+- Ops Console
+- Plant Console
+- Production Console
+- Energy Console
+- Technician Mobile App
+
+### Fiji Technical Service Domains (Product Scope)
+
+- Identity & Access
+- Data Plane
+- Monitoring & Alarms
+- Device Management
+- Analytics
+- Production & Quality
+- Integration & Orchestration
+- Presentation & UX
+
+### Classification Rules
+
+- **Business Service:** customer-facing experience.
+- **Technical Service:** reusable product capability supporting one or more business services.
+- **Configuration Item (CI):** infrastructure or external dependency (AKS, Event Hub, Okta, SendGrid, etc.).
+- Do not model infrastructure or external providers as business services.
+- Route incidents by technical domain ownership queues, not by UI/app names.
+
 ## Toolchain
 
 | Domain | Tool | Notes |

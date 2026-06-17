@@ -1,0 +1,86 @@
+{
+  "_comment": "Maps Brightlayer products to service tiers, Dynatrace entity IDs, and SRE ownership. Update as products onboard.",
+  "products": [
+    {
+      "id": "blc-fiji",
+      "name": "Brightlayer Cloud (BLC / Fiji)",
+      "tier": "T1",
+      "category": "Cloud",
+      "sre_owner": "REST Team",
+      "dynatrace_service_ids": [],
+      "dynatrace_slo_ids": [],
+      "jsm_service_tag": "blc-fiji",
+      "synthetic_monitor_ids": [],
+      "onboarded": true,
+      "notes": "30+ independently deployable services post Fiji 3.0"
+    },
+    {
+      "id": "bl-lighting",
+      "name": "Brightlayer Lighting",
+      "tier": "T1",
+      "category": "Cloud",
+      "sre_owner": "REST Team",
+      "dynatrace_service_ids": [],
+      "dynatrace_slo_ids": [],
+      "jsm_service_tag": "bl-lighting",
+      "synthetic_monitor_ids": [],
+      "onboarded": true,
+      "notes": "Fully under SRE monitoring as of April 2026"
+    },
+    {
+      "id": "bl-dit",
+      "name": "Brightlayer DIT",
+      "tier": "T2",
+      "category": "On-Premise",
+      "sre_owner": "REST Team",
+      "dynatrace_service_ids": [],
+      "dynatrace_slo_ids": [],
+      "jsm_service_tag": "bl-dit",
+      "synthetic_monitor_ids": [],
+      "onboarded": true,
+      "notes": "SNOW → JSM migration pending; one process-related MTTR breach in April"
+    },
+    {
+      "id": "bl-power",
+      "name": "Brightlayer Power",
+      "tier": "T2",
+      "category": "On-Premise",
+      "sre_owner": "REST Team",
+      "dynatrace_service_ids": [],
+      "dynatrace_slo_ids": [],
+      "jsm_service_tag": "bl-power",
+      "synthetic_monitor_ids": [],
+      "onboarded": false,
+      "onboarding_target": "Q3 2026",
+      "notes": "SRE monitoring onboarding in progress"
+    },
+    {
+      "id": "bl-epms",
+      "name": "Brightlayer EPMS",
+      "tier": "T2",
+      "category": "On-Premise",
+      "sre_owner": "REST Team",
+      "dynatrace_service_ids": [],
+      "dynatrace_slo_ids": [],
+      "jsm_service_tag": "bl-epms",
+      "synthetic_monitor_ids": [],
+      "onboarded": false,
+      "onboarding_target": "Q3 2026",
+      "notes": "SRE monitoring onboarding in progress"
+    },
+    {
+      "id": "bl-dcim",
+      "name": "Brightlayer DCIM",
+      "tier": "T2",
+      "category": "On-Premise",
+      "sre_owner": "REST Team",
+      "dynatrace_service_ids": [],
+      "dynatrace_slo_ids": [],
+      "jsm_service_tag": "bl-dcim",
+      "synthetic_monitor_ids": [],
+      "onboarded": false,
+      "onboarding_target": "Q3 2026",
+      "notes": "SRE monitoring onboarding in progress"
+    }
+  ]
+}

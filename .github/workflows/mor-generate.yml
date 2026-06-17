@@ -1,0 +1,167 @@
+name: MOR SRE Pillar 5 Slide Generation
+
+on:
+  schedule:
+    - cron: "0 6 1-7 * 1"  # First Monday of each month at 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run — generate deck but skip SharePoint upload and Teams notification"
+        type: boolean
+        default: false
+      mock_data:
+        description: "Use fixture data instead of live API calls (for testing)"
+        type: boolean
+        default: false
+      monthly_revenue_usd:
+        description: "Override monthly revenue (USD) for this MOR period — leave blank to use schedule.json value"
+        type: string
+        required: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  generate-mor:
+    name: Generate MOR SRE Pillar 5 Slides
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Azure (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Retrieve secrets from Azure Key Vault
+        id: kv
+        uses: azure/get-keyvault-secrets@v1
+        with:
+          keyvault: "sre-reporting-kv"
+          secrets: |
+            DT-CLIENT-SECRET,
+            DT-CLIENT-ID,
+            JSM-API-TOKEN,
+            JSM-USER-EMAIL,
+            OPSGENIE-API-KEY,
+            GH-APP-PRIVATE-KEY,
+            SWARMIA-API-KEY,
+            APPTIO-API-KEY,
+            SHAREPOINT-CLIENT-ID,
+            SHAREPOINT-CLIENT-SECRET,
+            TEAMS-WEBHOOK-URL
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: reporting/package-lock.json
+
+      - name: Install dependencies
+        working-directory: reporting
+        run: npm ci
+
+      - name: Override monthly revenue (if provided via workflow_dispatch)
+        if: ${{ inputs.monthly_revenue_usd != '' }}
+        working-directory: reporting
+        run: |
+          node -e "
+            const fs = require('fs');
+            const cfg = JSON.parse(fs.readFileSync('config/schedule.json', 'utf8'));
+            cfg.financials.monthly_revenue_usd = Number('${{ inputs.monthly_revenue_usd }}');
+            cfg.financials.hourly_revenue_at_risk_usd = Math.round(cfg.financials.monthly_revenue_usd / 720);
+            fs.writeFileSync('config/schedule.json', JSON.stringify(cfg, null, 2));
+            console.log('Revenue updated to:', cfg.financials.monthly_revenue_usd);
+          "
+
+      - name: Collect data from all sources (30-day window)
+        working-directory: reporting
+        run: node src/collect/index.js --mode=mor --window=30d ${{ inputs.mock_data == true && '--mock' || '' }}
+        env:
+          DT_ENV_ID:             ${{ vars.DT_ENV_ID }}
+          DT_CLIENT_ID:          ${{ steps.kv.outputs.DT-CLIENT-ID }}
+          DT_CLIENT_SECRET:      ${{ steps.kv.outputs.DT-CLIENT-SECRET }}
+          JSM_BASE_URL:          ${{ vars.JSM_BASE_URL }}
+          JSM_PROJECT_KEY:       ${{ vars.JSM_PROJECT_KEY }}
+          JSM_API_TOKEN:         ${{ steps.kv.outputs.JSM-API-TOKEN }}
+          JSM_USER_EMAIL:        ${{ steps.kv.outputs.JSM-USER-EMAIL }}
+          OPSGENIE_API_KEY:      ${{ steps.kv.outputs.OPSGENIE-API-KEY }}
+          GH_APP_PRIVATE_KEY:    ${{ steps.kv.outputs.GH-APP-PRIVATE-KEY }}
+          SWARMIA_API_KEY:       ${{ steps.kv.outputs.SWARMIA-API-KEY }}
+          APPTIO_API_KEY:        ${{ steps.kv.outputs.APPTIO-API-KEY }}
+
+      - name: Transform and calculate KPIs
+        working-directory: reporting
+        run: node src/transform/index.js --mode=mor
+
+      - name: Validate data payload
+        working-directory: reporting
+        run: |
+          node -e "
+            const Ajv = require('ajv');
+            const addFormats = require('ajv-formats');
+            const ajv = new Ajv({ allErrors: true });
+            addFormats(ajv);
+            const schema = require('./schemas/data-payload.schema.json');
+            const data   = require('./dist/data-payload.json');
+            const valid  = ajv.validate(schema, data);
+            if (!valid) {
+              console.error('Payload validation failed:', JSON.stringify(ajv.errors, null, 2));
+              process.exit(1);
+            }
+            console.log('✅ Payload valid | Overall RAG:', data.overall_rag, '| Exceptions:', data.exceptions.length);
+          "
+
+      - name: Generate MOR PPTX (Pillar 5 slides)
+        working-directory: reporting
+        run: |
+          YEARMONTH=$(date +%Y%m)
+          node src/generate/mor-slides.js
+          echo "PPTX_FILENAME=BrightlayerMOR_Pillar5_SRE_${YEARMONTH}.pptx" >> $GITHUB_ENV
+
+      - name: Upload to SharePoint
+        if: ${{ inputs.dry_run != true }}
+        working-directory: reporting
+        run: |
+          node src/distribute/sharepoint.js \
+            --file=dist/mor/${{ env.PPTX_FILENAME }} \
+            --folder="SRE/MOR/$(date +%Y)"
+        env:
+          SHAREPOINT_CLIENT_ID:     ${{ steps.kv.outputs.SHAREPOINT-CLIENT-ID }}
+          SHAREPOINT_CLIENT_SECRET: ${{ steps.kv.outputs.SHAREPOINT-CLIENT-SECRET }}
+          SHAREPOINT_TENANT_ID:     ${{ vars.SHAREPOINT_TENANT_ID }}
+          SHAREPOINT_SITE_ID:       ${{ vars.SHAREPOINT_SITE_ID }}
+          SHAREPOINT_DRIVE_ID:      ${{ vars.SHAREPOINT_DRIVE_ID }}
+
+      - name: Notify Teams
+        if: ${{ inputs.dry_run != true }}
+        working-directory: reporting
+        run: |
+          OVERALL_RAG=$(node -e "const d=require('./dist/data-payload.json'); console.log(d.overall_rag);")
+          node src/distribute/teams-notify.js \
+            --channel=sre-mor \
+            --message="MOR SRE Pillar 5 slides published — $(date +%B\ %Y)" \
+            --overall-rag=$OVERALL_RAG
+        env:
+          TEAMS_WEBHOOK_URL: ${{ steps.kv.outputs.TEAMS-WEBHOOK-URL }}
+
+      - name: Upload PPTX as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mor-sre-pillar5-${{ github.run_id }}
+          path: reporting/dist/mor/*.pptx
+          retention-days: 365
+
+      - name: Upload data payload as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mor-data-payload-${{ github.run_id }}
+          path: reporting/dist/data-payload.json
+          retention-days: 90

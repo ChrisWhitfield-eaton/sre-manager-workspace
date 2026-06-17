@@ -1,0 +1,38 @@
+{
+  "wbr": {
+    "description": "Weekly Business Review pre-read schedule",
+    "cron": "0 17 * * 1",
+    "cron_description": "Every Monday at 17:00 UTC",
+    "inputs_frozen": "Tuesday 09:00 local",
+    "meeting_day": "Tuesday",
+    "lookback_days": 7,
+    "sharepoint_folder": "SRE/WBR/{YEAR}",
+    "teams_channel": "sre-wbr",
+    "distribution_list": [],
+    "filename_pattern": "BrightlayerWBR_SRE_PreRead_{DATE}.pptx"
+  },
+  "mor": {
+    "description": "Monthly Operating Review — Pillar 5 SRE section",
+    "cron": "0 6 1-7 * 1",
+    "cron_description": "First Monday of each month at 06:00 UTC",
+    "lookback_days": 30,
+    "sharepoint_folder": "SRE/MOR/{YEAR}",
+    "teams_channel": "sre-mor",
+    "distribution_list": [],
+    "filename_pattern": "BrightlayerMOR_Pillar5_SRE_{YEARMONTH}.pptx",
+    "revenue_source": "manual",
+    "revenue_note": "Until Apptio integration is live, update monthly_revenue_usd manually in schedule.json or via workflow_dispatch input"
+  },
+  "financials": {
+    "monthly_revenue_usd": 14000000,
+    "revenue_period": "April 2026",
+    "hours_per_month": 720,
+    "hourly_revenue_at_risk_usd": 19444,
+    "note": "Update monthly_revenue_usd each MOR cycle until Apptio integration is live (Phase 2)"
+  },
+  "sre_headcount": {
+    "total": 6,
+    "on_call_eligible": 3,
+    "note": "Update when headcount changes"
+  }
+}

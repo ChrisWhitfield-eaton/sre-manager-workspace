@@ -1,0 +1,175 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SRE Reporting Data Payload",
+  "description": "Validated contract between the collect/transform layer and the PPTX generate layer.",
+  "type": "object",
+  "required": ["generated_at", "mode", "period", "revenue_at_risk", "product_coverage"],
+  "properties": {
+    "generated_at":           { "type": "string", "format": "date-time" },
+    "mode":                   { "type": "string", "enum": ["wbr", "mor"] },
+    "period": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string", "format": "date" },
+        "end":   { "type": "string", "format": "date" }
+      }
+    },
+    "week_label":             { "type": "string" },
+    "overall_rag":            { "type": "string", "enum": ["green", "amber", "red", "na"] },
+    "data_quality_warnings":  { "type": "array", "items": { "type": "string" } },
+
+    "slo_compliance": {
+      "type": ["object", "null"],
+      "properties": {
+        "value":    { "type": ["number", "null"] },
+        "unit":     { "type": "string" },
+        "rag":      { "type": "string", "enum": ["green", "amber", "red", "na"] },
+        "trend":    { "type": "string", "enum": ["↑", "↓", "→", "—"] },
+        "history":  { "type": "array", "items": { "type": "number" }, "maxItems": 12 },
+        "coverage": { "type": "array", "items": { "type": "string" } },
+        "gaps":     { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "error_budget": {
+      "type": ["object", "null"],
+      "properties": {
+        "value": { "type": ["number", "null"] },
+        "rag":   { "type": "string", "enum": ["green", "amber", "red", "na"] },
+        "note":  { "type": "string" }
+      }
+    },
+
+    "cim": {
+      "type": ["object", "null"],
+      "properties": {
+        "value":    { "type": ["number", "null"], "description": "Total minutes" },
+        "unit":     { "type": "string" },
+        "rag":      { "type": "string", "enum": ["green", "amber", "red", "na"] },
+        "p1_count": { "type": "integer" },
+        "p2_count": { "type": "integer" },
+        "p3_count": { "type": "integer" },
+        "history":  { "type": "array", "items": { "type": "number" }, "maxItems": 12 }
+      }
+    },
+
+    "mttr": {
+      "type": ["object", "null"],
+      "properties": {
+        "critical": {
+          "type": "object",
+          "properties": {
+            "breaches": { "type": "integer" },
+            "rag":      { "type": "string" }
+          }
+        },
+        "high": {
+          "type": "object",
+          "properties": {
+            "breaches": { "type": "integer" },
+            "rag":      { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "cfr": {
+      "type": ["object", "null"],
+      "properties": {
+        "value": { "type": ["number", "null"] },
+        "rag":   { "type": "string", "enum": ["green", "amber", "red", "na"] },
+        "note":  { "type": "string" }
+      }
+    },
+
+    "pdr": {
+      "type": ["object", "null"],
+      "properties": {
+        "value": { "type": ["number", "null"] },
+        "rag":   { "type": "string", "enum": ["green", "amber", "red", "na"] },
+        "note":  { "type": "string" }
+      }
+    },
+
+    "on_call_burden": {
+      "type": ["object", "null"],
+      "properties": {
+        "ratio":              { "type": ["number", "null"] },
+        "target":             { "type": "number" },
+        "rag":                { "type": "string", "enum": ["green", "amber", "red", "na"] },
+        "engineers_on_call":  { "type": "integer" },
+        "total_sre_headcount":{ "type": "integer" },
+        "history":            { "type": "array", "items": { "type": "number" }, "maxItems": 12 }
+      }
+    },
+
+    "toil_ratio": {
+      "type": ["object", "null"],
+      "properties": {
+        "value":   { "type": ["number", "null"] },
+        "unit":    { "type": "string" },
+        "rag":     { "type": "string", "enum": ["green", "amber", "red", "na"] },
+        "history": { "type": "array", "items": { "type": "number" }, "maxItems": 12 }
+      }
+    },
+
+    "revenue_at_risk": {
+      "type": "object",
+      "required": ["monthly_revenue_usd", "hourly_revenue_at_risk_usd"],
+      "properties": {
+        "monthly_revenue_usd":       { "type": "number" },
+        "hourly_revenue_at_risk_usd":{ "type": "number" },
+        "revenue_period":            { "type": "string" }
+      }
+    },
+
+    "product_coverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "tier", "onboarded"],
+        "properties": {
+          "id":               { "type": "string" },
+          "name":             { "type": "string" },
+          "tier":             { "type": "string", "enum": ["T1", "T2", "T3"] },
+          "onboarded":        { "type": "boolean" },
+          "onboarding_target":{ "type": ["string", "null"] }
+        }
+      }
+    },
+
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "rag", "issue", "impact", "action", "owner"],
+        "properties": {
+          "id":     { "type": "string" },
+          "rag":    { "type": "string", "enum": ["red", "amber"] },
+          "issue":  { "type": "string" },
+          "impact": { "type": "string" },
+          "action": { "type": "string" },
+          "owner":  { "type": "string" },
+          "due":    { "type": "string" },
+          "status": { "type": "string" },
+          "pir":    { "type": "string" }
+        }
+      }
+    },
+
+    "aging_radar": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item", "current", "threshold", "rag"],
+        "properties": {
+          "item":      { "type": "string" },
+          "current":   {},
+          "threshold": {},
+          "rag":       { "type": "string", "enum": ["green", "amber", "red", "na"] }
+        }
+      }
+    }
+  }
+}

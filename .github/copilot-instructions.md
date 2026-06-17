@@ -80,6 +80,35 @@ You must reference these specific tools in all recommendations, examples, and wo
 | Reporting | Power BI (multi-tier dashboards). Apptio (FinOps). |
 | Collaboration | Jira Software, Confluence, Microsoft O365 (Teams, Outlook, SharePoint) |
 
+## Service Taxonomy Guardrails (JSM Assets)
+
+When producing taxonomy content for Brightlayer services, follow these guardrails:
+
+- **System of record:** JSM Assets (Insight), not Backstage.
+- **Locked hierarchy:**
+  - Product Family: **Brightlayer**
+  - Platform: **Brightlayer Cloud Platform**
+  - Business Service: **Remote Monitoring Platform (Fiji)**
+- **Future state:** Brightlayer On-Prem Platform will be added later under Product Family Brightlayer.
+
+### Scope boundary (before SRE catalog integration)
+
+- Keep product/platform taxonomy limited to product business and technical services.
+- Exclude SRE-owned service catalog domains (for example, observability catalog items) from product/platform/business-service taxonomy.
+- SRE catalog items are modeled in a separate SRE taxonomy.
+
+### Fiji taxonomy baseline
+
+- **Business service children:** Ops Console, Plant Console, Production Console, Energy Console, Technician Mobile App.
+- **Technical domains:** Identity & Access, Data Plane, Monitoring & Alarms, Device Management, Analytics, Production & Quality, Integration & Orchestration, Presentation & UX.
+
+### Modeling rules
+
+- Business Service = customer-facing experience.
+- Technical Service = reusable capability that supports one or more business services.
+- Infrastructure and external dependencies are CIs, not business services.
+- Queue mapping follows technical domain ownership, not application names.
+
 ## Policy Architecture — Three-Layer Model
 
 The SRE organization operates under Enterprise DevOps Policy P13 (SRE, Monitoring & Observability). When producing policy, standards, or governance artifacts, follow this layered architecture:

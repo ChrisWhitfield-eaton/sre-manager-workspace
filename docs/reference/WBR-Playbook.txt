@@ -1,0 +1,410 @@
+
+EATON GLOBAL SOFTWARE — WEEKLY BUSINESS REVIEW (WBR) PLAYBOOK
+Version: 1.6 
+Owner: Mark Kelly
+Effective: Tuesday, 13 Jan 2026 (Dublin, IE)
+
+----------------------------------------------------------------------
+0. PURPOSE
+----------------------------------------------------------------------
+Establish a world‑class, no‑slides Weekly Business Review (WBR) that drives
+Eaton’s software culture toward transparency, speed, and predictable delivery.
+One mechanism, one truth: weekly performance, decisions, and commitments
+from system‑of‑record data; aligned to Eaton’s Hoshin objectives.
+
+----------------------------------------------------------------------
+1. OPERATING PRINCIPLES
+----------------------------------------------------------------------
+1) One plan, one team; facts & data over opinion; transparency & accountability.
+2) Exception‑only discussion: reds and emerging ambers; no “green talk.”
+3) Help‑needed is expected; no blame.
+4) Decisions captured live; commitments have owners and dates.
+5) No slide theatre: auto‑generated pre‑reads from system‑of‑record data.
+6) Time discipline: agenda and slots enforced; silence = agreement.
+
+RAG Definitions
+- RED: >10% milestone slip OR SLO breach OR error‑budget exhausted OR guardrail/aging breach
+- AMBER: 5–10% forecasted slip OR rising risk likely to breach within 2 weeks
+- GREEN: within plan and within thresholds
+
+----------------------------------------------------------------------
+2. WEEKLY COVERAGE — TEAMS (ORGS)
+----------------------------------------------------------------------
+We review by teams every week (not programs). Programs appear in Top‑N.
+
+Teams (~orgs):
+- Applied AI & Analytics — Lead: John Gough
+- Software Applications — Lead: Kiran Kanukurthy
+- Architecture Guild — Lead: Apurva Sharan
+- Cloud Services — Lead: Pradeep Abraham
+- Computational Systems Engineering — Lead: Keith Nolan
+- Platforms & Product Engineering — Lead: Alex Edwards
+- Software Automation & Operations — Lead: David Knowles
+
+Representative programs/initiatives (cross‑team; visible in Top‑N when relevant):
+- Device Lifecycle Management (DLM)
+- PGPU
+- Enterprise Linux Distribution (EELD)
+- Nexus SDK & Ecosystem (incl. PGPU)
+
+----------------------------------------------------------------------
+2.1 TEAM MINI SCOREBOARDS []TODO: Dave/Ian to finalise
+----------------------------------------------------------------------
+Purpose: Each team displays a one‑page Mini Scoreboard (lean charts) + Exceptions.
+Inputs: Swarmia, GitHub Actions, Jira, SRE dashboards, Finance/Cloud cost, platform telemetry.
+Ownership: Team Leads; Data Stewards are appointed by each Lead.
+
+A) Applied AI & Analytics — Lead: John Gough
+   Signals (4): Model prod %, AUC/F1 vs baseline, data freshness SLI, DF/LTc/CFR/FDRT (MLOps)
+   Exceptions (3): drift flag; freshness breach; CFR > target
+
+B) Software Applications — Lead: Kiran Kanukurthy
+   Signals (4): DF/LTc/CFR/FDRT; PR latency; DCI ≥ 90%; API 99p latency
+   Exceptions (3): SLO breach; DCI < 90%; PR latency > 48h
+
+C) Architecture Guild — Lead: Apurva Sharan
+   Signals (4): standards adoption %; convergence score (0–1); ADR throughput; duplicates removed
+   Exceptions (3): adoption < threshold; ADR lead time > target; duplication persists
+
+D) Cloud Services — Lead: Pradeep Abraham
+   Signals (4): SLO % / Error‑Budget %; CFR/FDRT; unit cost‑to‑serve; device/DLM coverage %
+   Exceptions (3): budget exhausted; cost overrun; DLM behind plan
+
+E) Computational Systems Engineering — Lead: Keith Nolan
+   Signals (4): research→prototype cadence; benchmark delta; tech transfer rate; blockers cleared
+   Exceptions (3): transfer miss; regression; blockers > X days
+
+F) Platforms & Product Engineering — Lead: Alex Edwards
+   Signals (4): verification coverage %; EELD compliance %; DF/LTc/CFR/FDRT; Flow Efficiency
+   Exceptions (3): readiness gate failure; EELD drop; flow decline
+
+G) Software Automation & Operations — Lead: David Knowles
+   Signals (4): pipeline stability %; mean queue time; repos on standard pipeline %; DevEx score
+   Exceptions (3): stability < target; long queues; DevEx < 8/10
+
+----------------------------------------------------------------------
+3. EXECUTIVE OVERVIEW (00–10) — THREE QUESTIONS TODO: Dave/Ian verify metrics
+----------------------------------------------------------------------
+Q1. What did customers/adopters experience last week?
+   - SLO %, Error‑Budget %, CFR %, FDRT (hours)
+   - Nexus SDK onboarding pace ≥ target/week; MAU trending ↑; partner cert cadence ≥ target/month
+   - API 99p latency within service SLO; success rate ≥ 99.5%
+   - SDK install success ≥ 97%; docs search→task completion ≥ target
+   - DLM coverage ≥ planned weekly ramp; critical vuln MTTR ≤ 14 days
+
+Q2. How did our business do last week?
+   - Unit cost‑to‑serve; cloud run‑rate vs plan; margin delta
+   - Automation Coverage (CI/CD) = % automated stages (build/test/security/deploy/rollback)
+   - Active Adoption & Reuse Index; standards adoption %; duplicates reduced
+   - DORA throughput & stability (DF, LTc, CFR, FDRT)
+
+Q3. Are we on track to hit targets?
+   - Hoshin gates (e.g., SLO ≥ 99.9% Tier‑1; CI/CD ≥ 80% team adoption; ecosystem onboarding)
+   - Error‑budget policy status (freeze/slow‑roll until reliability recovers)
+   - Flow Efficiency (value‑adding ÷ total lead time); PR review latency; WIP adherence
+
+----------------------------------------------------------------------
+4. METRIC GLOSSARY (HIGH‑5+) []TODO: Dave/ Ian update with Hoshin metics considered
+----------------------------------------------------------------------
+Reliability & Trust
+   - SLO %, Error‑Budget %, CFR %, FDRT (release incidents), MTTR (service incidents), security incidents (#)
+
+Velocity & Quality
+   - DF, LTc, PR review latency, cycle time, escaped defects (#)
+
+Customer & Growth (Adopter Proxies)
+   - Nexus SDK MAU & onboards; partner certifications; API latency/success; SDK install success; docs→task completion; DLM coverage & MTTR
+
+Platform Leverage
+   - Active Adoption & Reuse Index; standards adoption %; duplicates reduced; EELD compliance %
+
+People & Health
+   - DevEx score, 1:1 completion %, coaching commitments met %, attrition; AI‑in‑Every‑Group uplift ≥ 10%
+
+Financials
+   - Unit cost‑to‑serve; cloud run‑rate accuracy; margin points change; Automation Coverage (CI/CD)
+
+Thresholds (weekly defaults)
+   - DevEx ≥ 8.0/10
+   - PR Review Latency < 48 hours (Lane B exception policy applies)
+   - Delivery Consistency Index (DCI) ≥ 90% (see §6)
+   - Flow Efficiency ≥ 20% for mature teams; improving trend for others
+   - API 99p latency within service‑specific SLOs
+   - SLO ≥ 99.9% for Tier‑1 services (Cloud/Apps)
+   - Automation Coverage (CI/CD) ≥ 85% across priority repos/products
+
+----------------------------------------------------------------------
+5. CADENCE & AGENDA (60 MINUTES; EXCEPTION‑ONLY)
+----------------------------------------------------------------------
+Pre‑read: auto‑generated Monday 17:00; inputs frozen Tuesday 09:00
+
+00–10 Executive Overview (SVP)
+   - Q1/Q2/Q3 snapshot; Top 3 risks; prior actions closure
+
+10–20 Top‑N Portfolio (exception‑only one‑pagers)
+   - Owner: RAG; milestone variance; risks/blockers; help‑needed; decision asks (90 sec each)
+
+20–55 Teams (5–6 min each; flow focus; no green talk)
+   Lane A (Customer path to value): Software Applications → Cloud Services
+   Lane B (Product foundations): Platforms & Product Engineering → Computational Systems Engineering
+   Enablement/Governance: Software Automation & Operations → Architecture Guild → Applied AI & Analytics
+   - Mini Scoreboard (lean charts)
+   - Exceptions (Issue → Impact → Action → Owner → Due Date)
+   - Top Project (if applicable)
+
+55–60 Decisions & Escalations
+   - Record decisions live; owners; dates; reliability policy changes; publish action log within 24 hours
+
+----------------------------------------------------------------------
+6. PORTFOLIO GOVERNANCE (VISIBILITY FOR ALL WORK)
+----------------------------------------------------------------------
+Tier‑A: Top‑N (8–12 initiatives; programs, not orgs)
+   - Example programs: DLM; EELD; Nexus SDK & Ecosystem (incl. PGPU); Software Factory Velocity; Architecture Convergence
+   - Weekly exception one‑pagers; cross‑team owners/sponsors; explicit help‑needed
+
+Top‑N Selection Criteria & Cap
+   - Criteria: cross‑org impact; adopter/customer value; risk reduction; funding/ROI; dependency centrality
+   - Cap: 8–12 initiatives/quarter
+   - Review cadence: reassess monthly; changes approved in WBR; logged in Decision Register
+
+Tier‑B: Sustaining & Platform Baseline (all remaining team work)
+   - Guardrails (auto‑displayed weekly):
+     • DCI ≥ 90% (weekly committed items shipped)
+     • DORA mini‑set + PR review latency < 48h
+     • Flow Efficiency trend & WIP compliance
+     • Platform leverage (standards adoption %, reuse index, EELD compliance %)
+     • Quality hygiene (escaped defects; aging PRs/stories/incidents)
+     • AGING RADAR: PRs > 7 days; stories > 30 days; incidents > 7 days; P1 defects > 72h; actions > 14 days overdue
+   - Auto‑promotion: any guardrail/aging breach → 2–3 min exception slot
+   - Rotation: one Tier‑B team does a 90‑sec “what changed?” spotlight weekly
+
+----------------------------------------------------------------------
+7. RELIABILITY & READINESS GOVERNANCE (TWO LANES)
+----------------------------------------------------------------------
+Lane A — Cloud & Applications
+   - SRE SLOs & error‑budget policy; if budget exhausted: freeze/slow releases except P0/security until SLO restored
+   - Weekly: DF, LTc, CFR, FDRT, SLO %, adopter proxies (MAU, API latency/success, SDK success)
+
+Lane B — Embedded & Safety‑Critical
+   - Release readiness gates (traceability, verification coverage, compliance incl. ASPICE/ITAR)
+   - Default PR review latency < 48h
+   - Exception policy: if audit/compliance or controlled technical data constraints make <48h impractical,
+     the Program Manager records the exception in WBR, provides a remediation date, and reports weekly until back within target
+   - Weekly: on‑time deliverables; verification progress; defect containment; compliance actions; PR latency; Flow Efficiency
+
+----------------------------------------------------------------------
+8. DELIVERY CADENCE SLAS (APPLY TO ALL TEAMS)
+----------------------------------------------------------------------
+- Weekly commitment: see DCI threshold in §6 (≥ 90% shipped)
+- PR review latency < 48 hours; branching discipline (trunk or Git‑flow per domain; exceptions per §7)
+- Flow‑efficiency sprints: enforce WIP limits; swarm queues; show Flow Efficiency weekly
+
+----------------------------------------------------------------------
+9. DATA & AUTOMATION (NO SLIDES)
+----------------------------------------------------------------------
+Auto pre‑read sources:
+- Swarmia (DF, LTc, PR latency, investment categories)
+- GitHub Actions (deploy & recovery telemetry)
+- Jira (commitments vs delivery; issue/PR timestamps)
+- SRE dashboards (SLOs, error budgets)
+- Finance / Cloud cost (unit cost‑to‑serve; run‑rate)
+
+Visualization:
+- Canonical “6–12” chart stencil (Bryan Bunn) — 6 weeks (weekly), 12 months (monthly), MTD/QTD/YTD
+- Consistent titles, axes, colors (RAG overlays), legends
+
+----------------------------------------------------------------------
+10. DATA HARMONIZATION & RECONCILIATION
+----------------------------------------------------------------------
+Canonical investment categories:
+- New Things (NPI), Improvements, Maintenance, Productivity, Research
+
+[]TODO: Dave to bottom out on this
+Label conventions (Taxonomy Governance Pack):
+- Jira: Epic Label = <Investment>; Story Label = <Investment>; Team = <TeamName>
+- Swarmia: Investment Category maps 1:1 to Jira Labels
+- Tenrox: ProjectCode = Epic/Program; CostCenter = <TeamName>
+- Finance: Cost roll‑up Team → Domain → Portfolio → Company
+
+Weekly variance report (target < 5%):
+- Tenrox Hours vs Jira/Swarmia Hours; variance (abs/%); root‑cause; corrective actions
+
+----------------------------------------------------------------------
+11. INPUTS & DEADLINES
+----------------------------------------------------------------------
+- Monday 17:00: auto‑pre‑read generated
+- Tuesday 09:00: inputs frozen; late adds disallowed
+- Tuesday WBR: run on time; exception‑only
+- Wednesday: publish notes, decision log, action closures; roll‑up into MOR/QBR
+
+----------------------------------------------------------------------
+12. ROLES & RESPONSIBILITIES
+----------------------------------------------------------------------
+Chair: sets bar; enforces norms; approves escalations
+Facilitator/Timekeeper: — keeps flow on schedule; enforces exception‑only
+Scribe: updates decision register & action log live; publishes within 24 hours
+Team Leads: own Mini Scoreboards; appoint Data Stewards; ensure label hygiene
+Data Stewards (per team): maintain data quality; reconcile Tenrox/Finance; produce variance report
+
+----------------------------------------------------------------------
+13. DECISION REGISTER & EXCEPTION LOG (LIVE IN‑MEETING)
+----------------------------------------------------------------------
+Decision Register (fields):
+- ID, Date, Owner, Domain (Policy/Investment/Architecture/Resource),
+  Title, Context/Inputs (links), Options Considered, Decision, Rationale,
+  Impacts (Customer/Finance/Engineering), Follow‑ups, Due Date, Status, Review Date
+
+Exception Log (fields):
+- Issue ID, Team, Issue, Impact, Action, Owner, Due Date, Status, Notes
+
+----------------------------------------------------------------------
+14. MEETING SCRIPT & ENFORCEMENT CUES
+----------------------------------------------------------------------
+Chair — Opening (2 min)
+- “Exceptions only. Reds/ambers welcome. We leave with decisions, owners, and dates.
+   Speak to data. If it’s green, we move on.”
+
+Facilitator — []TODO Confirm Ian Beckett — Cues
+- “What is the data? One sentence.”
+- “Is this an exception? If not, we move on.”
+- “What help is needed and by whom?”
+- “Decision ask: options, recommendation, due date.”
+- “We’re at 60 seconds—commit owner and date or park it.”
+
+Chair — Closing
+- Decisions and actions are recorded. Owners confirm dates. Notes publish in 24 hours.
+
+----------------------------------------------------------------------
+15. CULTURE EVIDENCE LOOP (WEEKLY, IN NOTES)
+----------------------------------------------------------------------
+- Early Reds surfaced: <count> (vs last week)
+- Help‑needed asks answered in‑meeting: <count> / <%>
+- Avg. time‑to‑decision (ask → decision): <minutes>
+- % decisions with clear owner/date: <percentage>
+- % commitments met by next WBR: <percentage>
+
+----------------------------------------------------------------------
+16. SLO & THRESHOLD CATALOG (ONE‑PAGE ATTACHMENT)
+----------------------------------------------------------------------
+Cloud/Apps (Tier‑1 service example)
+- SLOs: Availability ≥ 99.9%, 99p Latency < X ms, Error‑Budget Window = 4 weeks
+- Triggers: SLO miss OR budget exhausted → freeze/slow‑roll; CFR > 15% → remediation sprint
+- Metrics: CFR, FDRT, MTTR, API 99p Latency, SLO %
+- Runbooks: incident, rollback, canary links
+
+Embedded/Safety (program example)
+- Gates: verification coverage ≥ X%, traceability completeness ≥ X%, ASPICE actions closed
+- Exceptions: PR latency < 48h (Lane‑B exception with remediation date)
+- Metrics: DF, LTc, CFR, FDRT, PR latency, Flow Efficiency
+
+----------------------------------------------------------------------
+17. MONTHLY MECHANISM AUDIT (10 MIN)
+----------------------------------------------------------------------
+Scope: exception‑only compliance; time discipline; data quality; action closure
+
+Audit metrics:
+- % teams adhering to exceptions‑only (target ≥ 95%)
+- Avg. “time to decision” in WBR (target ≤ 5 min per decision ask)
+- Action closure rate by next WBR (target ≥ 90%)
+- Weekly variance (Tenrox vs Jira/Swarmia) (target < 5%)
+- Chair/Facilitator intervention count (trend ↓)
+
+Outcomes:
+- ≥ 3 corrective actions; owners; dates; policy updates if needed
+
+Owners:
+- Facilitator (Ian Beckett) and SA&O (David Knowles)
+Schedule:
+- First audit — Wed, Feb 11, 2026
+
+----------------------------------------------------------------------
+18. APPENDICES (TEMPLATES & MAPPINGS) []TODO: Ian to ensure all templates are avaiable and up-to-date
+----------------------------------------------------------------------
+A) Files (available on request)
+   - WBR_Charter.docx
+   - WBR_Decision_Register.xlsx
+   - WBR_Exception_Log.xlsx
+
+B) Hoshin - WBR Mapping (examples)
+   - Ecosystem (Nexus SDK): MAU/onboards; partner certs; docs→task completion
+   - Reliability & Cost: SLO %, error‑budget %, unit cost‑to‑serve; run‑rate; margin
+   - Factory Velocity: DORA (DF/LTc/CFR/FDRT), PR latency, Flow Efficiency, DCI
+   - Platform Unification/EELD: adoption & compliance %
+   - DLM: coverage %, critical vuln MTTR ≤ 14 days
+
+C) Chart Stencil (Bryan Bunn)
+   - Canonical charts: assets (PNG/HTML/CSS) with uniform axes, colors, titles, legends
+
+D) Canonical Taxonomy
+   - New Things (NPI), Improvements, Maintenance, Productivity, Research
+   - Mapping: Jira Labels → Swarmia → Tenrox → Finance
+
+E) Weekly Variance Report (template)
+   - Team, period, Tenrox hours, Jira/Swarmia hours, variance (abs/%), root‑cause, actions
+
+----------------------------------------------------------------------
+19. NEXT STEPS (TO ACTIVATE)
+----------------------------------------------------------------------
+1) Provide Q1 Top‑N list (programs → sponsor/owner → budget) and Tier‑B roster
+2) Confirm Hoshin thresholds (SLO, CI/CD adoption, DLM, ecosystem)
+3) Team Leads appoint Data Stewards
+4) Approve pilot scope (Apps + Cloud + SA&O; Platforms + Architecture + CSE)
+5) First Eaton auto‑pre‑read by Friday 17:00; run no‑slides WBR Tuesday
+
+----------------------------------------------------------------------
+END OF PLAYBOOK
+----------------------------------------------------------------------
+
+
+EATON WBR PLAYBOOK — ACRONYM DICTIONARY (v1.0)
+
+AI  — Artificial Intelligence
+API — Application Programming Interface
+ASPICE — Automotive SPICE
+BLC — Brightlayer Cloud
+BLSS — Brightlayer Software Suite
+BOM — Bill of Materials
+BPR — Business Plan Review
+CI/CD — Continuous Integration / Continuous Delivery (or Deployment)
+CFR — Change Failure Rate
+DCI — Delivery Consistency Index
+DLM — Device Lifecycle Management (program)
+DORA — DevOps Research and Assessment
+DF — Deployment Frequency
+EELD — Eaton Enterprise Linux Distribution (program)
+FDRT — Failed‑Deployment Recovery Time
+Flow Efficiency — Value‑adding time ÷ total lead time
+HIL — Hardware‑in‑the‑Loop
+Hoshin (X‑Matrix) — Strategy deployment method
+IPM2 — Intelligent Power Manager 2
+ITAR — International Traffic in Arms Regulations
+Jira — Issue/commitment tracking
+LTc — Lead Time for Changes
+MAU — Monthly Active Users
+MCU — Microcontroller
+MOR — Management Operating Review
+MTD/QTD/YTD — Month/Quarter/Year‑To‑Date
+MTTR — Mean Time To Recover
+Nexus SDK — Eaton developer kit (program) for ecosystem activation
+NPI — New Product Introduction
+NRR — Net Revenue Retention
+PGPU — Power Genome Processing Unit (program element)
+PR — Pull Request
+PXI — PCI eXtensions for Instrumentation
+QBR — Quarterly Business Review
+RAG — Red / Amber / Green
+ROI — Return on Investment
+RTOS — Real‑Time Operating System
+SDK — Software Development Kit
+SLA — Service Level Agreement
+SLI — Service Level Indicator
+SLO — Service Level Objective
+SRE — Site Reliability Engineering
+SRP / SPL — Software Ready Platform / Software Library Platform
+Swarmia — Engineering analytics platform
+Tenrox — Time tracking/PSA system
+Tier‑1 — Highest criticality services (SLO ≥ 99.9%)
+TTV — Time‑To‑Value
+WBR — Weekly Business Review
+WIP — Work In Progress
+“6–12” Chart Format — 6 weeks (weekly) + 12 months (monthly) + MTD/QTD/YTD context

@@ -1,0 +1,151 @@
+name: WBR SRE Pre-Read Generation
+
+on:
+  schedule:
+    - cron: "0 17 * * 1"   # Every Monday 17:00 UTC — pre-read published before inputs frozen Tue 09:00
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run — generate deck but skip SharePoint upload and Teams notification"
+        type: boolean
+        default: false
+      mock_data:
+        description: "Use fixture data instead of live API calls (for testing)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write            # Required for OIDC authentication to Azure Key Vault
+
+jobs:
+  generate-wbr:
+    name: Generate WBR SRE Pre-Read
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Azure (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Retrieve secrets from Azure Key Vault
+        id: kv
+        uses: azure/get-keyvault-secrets@v1
+        with:
+          keyvault: "sre-reporting-kv"
+          secrets: |
+            DT-CLIENT-SECRET,
+            DT-CLIENT-ID,
+            JSM-API-TOKEN,
+            JSM-USER-EMAIL,
+            OPSGENIE-API-KEY,
+            GH-APP-PRIVATE-KEY,
+            SWARMIA-API-KEY,
+            SHAREPOINT-CLIENT-ID,
+            SHAREPOINT-CLIENT-SECRET,
+            TEAMS-WEBHOOK-URL
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: reporting/package-lock.json
+
+      - name: Install dependencies
+        working-directory: reporting
+        run: npm ci
+
+      - name: Collect data from all sources
+        working-directory: reporting
+        run: node src/collect/index.js --mode=wbr --window=7d ${{ inputs.mock_data == true && '--mock' || '' }}
+        env:
+          DT_ENV_ID:             ${{ vars.DT_ENV_ID }}
+          DT_CLIENT_ID:          ${{ steps.kv.outputs.DT-CLIENT-ID }}
+          DT_CLIENT_SECRET:      ${{ steps.kv.outputs.DT-CLIENT-SECRET }}
+          JSM_BASE_URL:          ${{ vars.JSM_BASE_URL }}
+          JSM_PROJECT_KEY:       ${{ vars.JSM_PROJECT_KEY }}
+          JSM_API_TOKEN:         ${{ steps.kv.outputs.JSM-API-TOKEN }}
+          JSM_USER_EMAIL:        ${{ steps.kv.outputs.JSM-USER-EMAIL }}
+          OPSGENIE_API_KEY:      ${{ steps.kv.outputs.OPSGENIE-API-KEY }}
+          GH_APP_PRIVATE_KEY:    ${{ steps.kv.outputs.GH-APP-PRIVATE-KEY }}
+          SWARMIA_API_KEY:       ${{ steps.kv.outputs.SWARMIA-API-KEY }}
+
+      - name: Transform and calculate KPIs
+        working-directory: reporting
+        run: node src/transform/index.js --mode=wbr
+
+      - name: Validate data payload
+        working-directory: reporting
+        run: |
+          node -e "
+            const Ajv = require('ajv');
+            const addFormats = require('ajv-formats');
+            const ajv = new Ajv({ allErrors: true });
+            addFormats(ajv);
+            const schema = require('./schemas/data-payload.schema.json');
+            const data   = require('./dist/data-payload.json');
+            const valid  = ajv.validate(schema, data);
+            if (!valid) {
+              console.error('Payload validation failed:');
+              console.error(JSON.stringify(ajv.errors, null, 2));
+              process.exit(1);
+            }
+            console.log('✅ Payload valid');
+            console.log('Overall RAG:', data.overall_rag);
+            console.log('Exceptions:', data.exceptions.length);
+          "
+
+      - name: Generate WBR PPTX
+        working-directory: reporting
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          node src/generate/wbr-slides.js
+          echo "PPTX_FILENAME=BrightlayerWBR_SRE_PreRead_${DATE}.pptx" >> $GITHUB_ENV
+
+      - name: Upload to SharePoint
+        if: ${{ inputs.dry_run != true }}
+        working-directory: reporting
+        run: |
+          node src/distribute/sharepoint.js \
+            --file=dist/wbr/${{ env.PPTX_FILENAME }} \
+            --folder="SRE/WBR/$(date +%Y)"
+        env:
+          SHAREPOINT_CLIENT_ID:     ${{ steps.kv.outputs.SHAREPOINT-CLIENT-ID }}
+          SHAREPOINT_CLIENT_SECRET: ${{ steps.kv.outputs.SHAREPOINT-CLIENT-SECRET }}
+          SHAREPOINT_TENANT_ID:     ${{ vars.SHAREPOINT_TENANT_ID }}
+          SHAREPOINT_SITE_ID:       ${{ vars.SHAREPOINT_SITE_ID }}
+          SHAREPOINT_DRIVE_ID:      ${{ vars.SHAREPOINT_DRIVE_ID }}
+
+      - name: Notify Teams
+        if: ${{ inputs.dry_run != true }}
+        working-directory: reporting
+        run: |
+          OVERALL_RAG=$(node -e "const d=require('./dist/data-payload.json'); console.log(d.overall_rag);")
+          node src/distribute/teams-notify.js \
+            --channel=sre-wbr \
+            --message="WBR SRE Pre-Read published — $(date +%d-%b-%Y)" \
+            --overall-rag=$OVERALL_RAG
+        env:
+          TEAMS_WEBHOOK_URL: ${{ steps.kv.outputs.TEAMS-WEBHOOK-URL }}
+
+      - name: Upload PPTX as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wbr-sre-preread-${{ github.run_id }}
+          path: reporting/dist/wbr/*.pptx
+          retention-days: 90
+
+      - name: Upload data payload as artifact (for debugging)
+        uses: actions/upload-artifact@v4
+        with:
+          name: wbr-data-payload-${{ github.run_id }}
+          path: reporting/dist/data-payload.json
+          retention-days: 30

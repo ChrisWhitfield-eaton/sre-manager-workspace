@@ -1,27 +1,94 @@
-# SRE Manager Workspace — Setup Guide
+# SRE Manager Workspace
+
+This repository is the operational hub for the SRE Manager at Eaton Global Software Operations. It contains agent instructions, reporting automation, policy references, and session context for the Brightlayer SRE organization.
+
+---
 
 ## Workspace Structure
 
 ```
 sre-manager-workspace/
-├── sre-manager.code-workspace          ← Multi-root workspace file (open this in VS Code)
-├── AGENTS.md                           ← Team-shared agent definition (commit to your repos)
-├── .gitignore                          ← Protects credentials and excludes .vscode/
 ├── .github/
-│   ├── copilot-instructions.md         ← YOUR personal agent instructions (always-on)
+│   ├── copilot-instructions.md         ← Personal agent instructions (always-on context)
 │   ├── context/
-│   │   └── manager-briefing.md         ← Persistent session context (update weekly)
-│   └── instructions/
-│       ├── backstage.instructions.md   ← Activates when editing *backstage*, *catalog-info*
-│       ├── cicd.instructions.md        ← Activates when editing workflows/, *pipeline*, *deploy*
-│       ├── iac.instructions.md         ← Activates when editing *.tf, modules/, environments/
-│       ├── incident.instructions.md    ← Activates when editing *incident*, *pir*, *runbook*
-│       ├── kpi.instructions.md         ← Activates when editing *kpi*, *metric*, *dashboard*, *wbr*
-│       ├── observability.instructions.md ← Activates when editing *monitor*, *slo*, *dashboard*
-│       └── policy.instructions.md      ← Activates when editing *policy*, *adr*, *standard*
-├── .vscode/
-│   └── mcp.json                        ← MCP server connections (gitignored — each user maintains locally)
+│   │   └── manager-briefing.md         ← Weekly session context (update before each session)
+│   ├── instructions/                   ← Domain-scoped instruction files (auto-activate by file pattern)
+│   │   ├── backstage.instructions.md
+│   │   ├── cicd.instructions.md
+│   │   ├── iac.instructions.md
+│   │   ├── incident.instructions.md
+│   │   ├── kpi.instructions.md
+│   │   ├── observability.instructions.md
+│   │   └── policy.instructions.md
+│   └── workflows/                      ← GitHub Actions automation
+│       ├── wbr-generate.yml            ← Cron: Mon 17:00 UTC — WBR pre-read
+│       └── mor-generate.yml            ← Cron: First Mon of month 06:00 UTC — MOR Pillar 5
+│
+├── reporting/                          ← Reporting automation pipeline (see reporting/README.md)
+│   ├── README.md                       ← Full pipeline documentation
+│   ├── package.json
+│   ├── config/
+│   │   ├── thresholds.json             ← RAG thresholds — single source of truth
+│   │   ├── products.json               ← Brightlayer product → tier → DT entity mapping
+│   │   └── schedule.json               ← Cron schedule, financials, headcount config
+│   ├── src/
+│   │   ├── collect/                    ← API collectors (Dynatrace, JSM, OpsGenie, GH Actions)
+│   │   ├── transform/                  ← RAG calculation, KPI derivation, exception detection
+│   │   ├── generate/                   ← PPTX generation (pptxgenjs)
+│   │   │   ├── mor-slides.js           ← MOR Pillar 5 SRE section (5 slides)
+│   │   │   └── wbr-slides.js           ← WBR pre-read template (7 slides)
+│   │   └── distribute/                 ← SharePoint upload + Teams notification
+│   ├── schemas/
+│   │   └── data-payload.schema.json    ← JSON Schema — validated contract between layers
+│   ├── input/
+│   │   └── mor/                        ← Source MOR decks (reference only)
+│   └── dist/                           ← Generated outputs (gitignored)
+│       ├── mor/
+│       └── wbr/
+│
+├── docs/
+│   └── reference/
+│       └── WBR-Playbook.txt            ← WBR Playbook v1.6 (Mark Kelly, Jan 2026)
+│
+├── archive/                            ← Historical generated decks (committed for record)
+│   ├── mor/2026/
+│   └── wbr/2026/
+│
+├── AGENTS.md                           ← Team-shared agent definition
+├── sre-manager.code-workspace          ← VS Code multi-root workspace file
+└── README.md                           ← This file
 ```
+
+---
+
+## Reporting Automation — Quick Start
+
+The `reporting/` directory contains the full pipeline for automated MOR and WBR deck generation. See **[reporting/README.md](reporting/README.md)** for complete documentation.
+
+**Run locally (manual, no API keys required):**
+```powershell
+cd reporting
+npm install
+node src/collect/index.js --mode=wbr --mock    # generate fixture payload
+node src/transform/index.js --mode=wbr          # apply RAG thresholds
+node src/generate/wbr-slides.js                 # produce PPTX
+# Output: reporting/dist/wbr/BrightlayerWBR_SRE_PreRead_<DATE>.pptx
+```
+
+**Automated (GitHub Actions):**
+| Trigger | Workflow | Output |
+|---|---|---|
+| Every Monday 17:00 UTC | `wbr-generate.yml` | WBR pre-read → SharePoint + Teams |
+| First Monday of month 06:00 UTC | `mor-generate.yml` | MOR Pillar 5 slides → SharePoint + Teams |
+| `workflow_dispatch` | Both | Manual run with optional `--dry-run` and `--mock` flags |
+
+**Update monthly financials** (until Apptio integration is live):
+```json
+// reporting/config/schedule.json → financials.monthly_revenue_usd
+```
+Or pass via `workflow_dispatch` input `monthly_revenue_usd`.
+
+---
 
 ### Companion Repo: sre-policy
 

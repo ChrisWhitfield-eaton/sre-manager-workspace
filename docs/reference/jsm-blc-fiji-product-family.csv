@@ -1,0 +1,3 @@
+canonical_name,class,parent,description,engineering_owner_team,sre_support_owner,tier,queue,customer_facing,statuspage_exposure,alias,notes
+Brightlayer,Product Family,,Eaton's IoT and digital product portfolio,Eaton Global Software Operations,REST + Platform SRE,T1,BLC-SRE-Ops,No,No,,Root node for all Brightlayer platforms
+Brightlayer Cloud Platform,Platform,Brightlayer,Shared multi-tenant cloud platform for device connectivity telemetry identity and adopter enablement,BLC Platform Leadership,REST + Platform SRE,T1,BLC-SRE-Ops,Yes,Yes,BLC; PX White,Previously referenced as PX White

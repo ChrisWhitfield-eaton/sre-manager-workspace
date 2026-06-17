@@ -1,0 +1,27 @@
+canonical_name,class,ci_type,description,owner,related_technical_service,notes
+AKS Cluster(s),Configuration Item,Container Platform,Kubernetes clusters hosting BLC and FIJI services,UNASSIGNED_REQUIRES_VALIDATION,"BLC Data Plane,BLC Platform Edge & API,FIJI Data Plane",Owner validation required
+Application Gateway,Configuration Item,Ingress Infrastructure,WAF-enabled internet-facing ingress layer for BLC API,UNASSIGNED_REQUIRES_VALIDATION,BLC Platform Edge & API,Owner validation required
+Azure APIM,Configuration Item,API Gateway Infrastructure,Internal API management and routing layer behind application gateways,UNASSIGNED_REQUIRES_VALIDATION,BLC Platform Edge & API,Owner validation required
+Azure IoT Hub,Configuration Item,IoT Connectivity,Device D2C telemetry twin and direct-method connectivity,UNASSIGNED_REQUIRES_VALIDATION,"BLC Device Connectivity & Provisioning,FIJI Device Management",Per-adopter IoT Hub instances also apply
+Azure DPS,Configuration Item,IoT Provisioning,Device Provisioning Service for first-connect device assignment,UNASSIGNED_REQUIRES_VALIDATION,BLC Device Connectivity & Provisioning,Owner validation required
+Azure Event Hub,Configuration Item,Event Streaming,Telemetry and streaming event ingestion,UNASSIGNED_REQUIRES_VALIDATION,"BLC Data Plane,FIJI Monitoring & Alarms",Owner validation required
+Azure Service Bus,Configuration Item,Messaging,Command and alarm event delivery bus,UNASSIGNED_REQUIRES_VALIDATION,"BLC Alarms & Events,BLC Device Lifecycle",Owner validation required
+Kafka,Configuration Item,Messaging Platform,Event bus for service-to-service events,UNASSIGNED_REQUIRES_VALIDATION,"FIJI Monitoring & Alarms,FIJI Integration & Orchestration",Owner validation required
+Azure ADX,Configuration Item,Analytics Database,Historical telemetry and trend analytics store,UNASSIGNED_REQUIRES_VALIDATION,"BLC Data Plane,FIJI Analytics",Owner validation required
+PostgreSQL,Configuration Item,Relational Database,Primary relational store for identity entitlements tenancy audit,UNASSIGNED_REQUIRES_VALIDATION,"BLC Identity & Access,FIJI Identity & Access",Owner validation required
+Elasticsearch,Configuration Item,Search/Analytics Store,Search and event index for device and alarm data,UNASSIGNED_REQUIRES_VALIDATION,"BLC Device Lifecycle,FIJI Monitoring & Alarms",Owner validation required
+MongoDB,Configuration Item,Document Database,Document store for ERPS and predictive collections,UNASSIGNED_REQUIRES_VALIDATION,"FIJI Analytics,BLC Profiles & Semantics",Owner validation required
+TSDB,Configuration Item,Time-Series Database,Time-series store for telemetry energy and analytics workloads,UNASSIGNED_REQUIRES_VALIDATION,"FIJI Monitoring & Alarms,FIJI Analytics",Owner validation required
+Redis,Configuration Item,Cache,Operational cache for realtime and latency-sensitive services,UNASSIGNED_REQUIRES_VALIDATION,BLC Data Plane,Owner validation required
+Azure Blob Storage,Configuration Item,Object Storage,Reports binaries firmware and waveform content storage,UNASSIGNED_REQUIRES_VALIDATION,"BLC Device Lifecycle,FIJI Device Management",Owner validation required
+Azure Table Storage,Configuration Item,NoSQL Store,Device commission and operational metadata store,UNASSIGNED_REQUIRES_VALIDATION,FIJI Device Management,Owner validation required
+Azure Key Vault,Configuration Item,Secrets Management,Secret and certificate management for platform services,UNASSIGNED_REQUIRES_VALIDATION,"BLC Device Connectivity & Provisioning,BLC Platform Edge & API",Owner validation required
+Okta,Configuration Item,External Identity Provider,SSO OIDC and OAuth identity provider,UNASSIGNED_REQUIRES_VALIDATION,"BLC Identity & Access,FIJI Identity & Access",External vendor
+SendGrid,Configuration Item,External SaaS,Email delivery for notifications,UNASSIGNED_REQUIRES_VALIDATION,BLC Notifications,External vendor
+Twilio,Configuration Item,External SaaS,SMS and voice delivery for notifications,UNASSIGNED_REQUIRES_VALIDATION,BLC Notifications,External vendor
+Starfish Gateway,Configuration Item,Edge Gateway,Device connectivity and data publishing edge gateway,UNASSIGNED_REQUIRES_VALIDATION,FIJI Device Management,Owner validation required
+EPAS,Configuration Item,External Platform Dependency,Device authentication for device workflows,UNASSIGNED_REQUIRES_VALIDATION,FIJI Device Management,Owner validation required
+Private DNS Zones,Configuration Item,Network / DNS,Private link DNS resolution for storage Key Vault ADX and related services,UNASSIGNED_REQUIRES_VALIDATION,BLC Platform Edge & API,Owner validation required
+NAT Gateway,Configuration Item,Network Egress,Internet egress path for platform workloads,UNASSIGNED_REQUIRES_VALIDATION,BLC Platform Edge & API,Owner validation required
+Zscaler Cloud Connector,Configuration Item,External Network,Corporate-bound egress and admin ingress support,External IT,BLC Platform Edge & API,Owned by IT not SRE
+Feature Store,Configuration Item,ML Data Store,Feature repository for analytics and predictive services,UNASSIGNED_REQUIRES_VALIDATION,FIJI Analytics,Owner validation required

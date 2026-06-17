@@ -1,0 +1,94 @@
+{
+  "slo_compliance_pct": {
+    "description": "SLO compliance percentage for Tier-1 services",
+    "source": "Dynatrace",
+    "green": { "gte": 99.5 },
+    "amber": { "gte": 99.3, "lt": 99.5 },
+    "red":   { "lt": 99.3 }
+  },
+  "error_budget_remaining_pct": {
+    "description": "Remaining error budget percentage before policy triggers",
+    "source": "Dynatrace SLOs",
+    "green": { "gt": 20 },
+    "amber": { "gt": 0, "lte": 20 },
+    "red":   { "lte": 0 }
+  },
+  "cim_p1_count": {
+    "description": "P1 customer impacted incidents per period",
+    "source": "JSM",
+    "green": { "eq": 0 },
+    "amber": { "eq": 1 },
+    "red":   { "gte": 2 }
+  },
+  "mttr_critical_breaches": {
+    "description": "Count of Critical MTTR breaches (>2h) per period",
+    "source": "JSM",
+    "green": { "eq": 0 },
+    "amber": { "eq": 1 },
+    "red":   { "gte": 2 }
+  },
+  "mttr_high_breaches": {
+    "description": "Count of High MTTR breaches (>4h) per period",
+    "source": "JSM",
+    "green": { "eq": 0 },
+    "amber": { "lte": 2 },
+    "red":   { "gte": 3 }
+  },
+  "cfr_pct": {
+    "description": "Change failure rate — deployments causing degradation/rollback",
+    "source": "GitHub Actions + JSM",
+    "green": { "lt": 5 },
+    "amber": { "gte": 5, "lte": 15 },
+    "red":   { "gt": 15 }
+  },
+  "pdr_pct": {
+    "description": "Proactive detection ratio — system detected vs total incidents",
+    "source": "JSM classification field",
+    "green": { "gte": 80 },
+    "amber": { "gte": 60, "lt": 80 },
+    "red":   { "lt": 60 }
+  },
+  "on_call_burden_ratio": {
+    "description": "Engineers in rotation : total SRE headcount (Google SRE benchmark 1:4)",
+    "source": "OpsGenie",
+    "green": { "gte": 4.0 },
+    "amber": { "gte": 2.0, "lt": 4.0 },
+    "red":   { "lt": 2.0 }
+  },
+  "toil_ratio_pct": {
+    "description": "Percentage of SRE work that is manual, repetitive, automatable",
+    "source": "JSM + Tenrox",
+    "green": { "lt": 20 },
+    "amber": { "gte": 20, "lte": 33 },
+    "red":   { "gt": 33 }
+  },
+  "alert_snr_pct": {
+    "description": "Alert signal-to-noise — actionable alerts vs total fired",
+    "source": "OpsGenie",
+    "green": { "gte": 70 },
+    "amber": { "gte": 50, "lt": 70 },
+    "red":   { "lt": 50 }
+  },
+  "iom_critical_sla_pct": {
+    "description": "Critical IOM findings remediated within 48h SLA",
+    "source": "CrowdStrike Falcon CSPM",
+    "green": { "gte": 95 },
+    "amber": { "gte": 80, "lt": 95 },
+    "red":   { "lt": 80 }
+  },
+  "iom_high_sla_pct": {
+    "description": "High IOM findings remediated within 7d SLA",
+    "source": "CrowdStrike Falcon CSPM",
+    "green": { "gte": 95 },
+    "amber": { "gte": 80, "lt": 95 },
+    "red":   { "lt": 80 }
+  },
+  "aging_thresholds": {
+    "open_p1_no_owner_hours": 2,
+    "open_p3_days": 7,
+    "open_p1_defect_hours": 72,
+    "overdue_wbr_actions_days": 14,
+    "pr_review_latency_hours": 48,
+    "error_budget_warning_pct": 20
+  }
+}
