@@ -1,8 +1,6 @@
 name: MOR SRE Pillar 5 Slide Generation
 
 on:
-  schedule:
-    - cron: "0 6 1-7 * 1"  # First Monday of each month at 06:00 UTC
   workflow_dispatch:
     inputs:
       dry_run:

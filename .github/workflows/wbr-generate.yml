@@ -1,8 +1,6 @@
 name: WBR SRE Pre-Read Generation
 
 on:
-  schedule:
-    - cron: "0 17 * * 1"   # Every Monday 17:00 UTC — pre-read published before inputs frozen Tue 09:00
   workflow_dispatch:
     inputs:
       dry_run:
