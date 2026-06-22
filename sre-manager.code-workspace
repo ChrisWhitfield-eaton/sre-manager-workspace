@@ -45,23 +45,6 @@
 				"comments": false,
 				"strings": false
 			}
-		},
-		"mcp": {
-			"servers": {
-				"dynatrace-mcp-server": {
-					"command": "npx",
-					"args": [
-						"-y",
-						"@dynatrace-oss/dynatrace-mcp-server@latest"
-					],
-					"env": {
-						"DT_ENVIRONMENT": "${env:DT_ENVIRONMENT}",
-						"DT_API_TOKEN": "${env:DT_API_TOKEN}"
-					},
-					"type": "stdio"
-				}
-			},
-			"inputs": []
 		}
 	}
 }
